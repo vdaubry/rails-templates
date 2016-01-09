@@ -1,0 +1,11 @@
+<%= form_tag sessions_path, {class: 'form-signin'} do %>
+  <h2 class="form-signin-heading">Please sign in</h2>
+  
+  <label for="inputEmail" class="sr-only">Email address</label>
+  <%= email_field_tag :email, nil, placeholder: "Email address", class: 'form-control', required: true, autofocus: true %>
+  
+  <label for="inputPassword" class="sr-only">Password</label>
+  <%= password_field_tag :password, nil, placeholder: "Password", class: 'form-control', required: true %>
+  
+  <%= submit_tag "Sign in", class: "btn btn-lg btn-primary btn-block" %>
+<% end %>
