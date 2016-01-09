@@ -29,6 +29,7 @@ gem 'sentry-raven'
 gem 'sidekiq'
 gem 'lograge'
 gem 'aws-sdk'
+gem 'administrate'
 
 gem_group :development, :test do
   gem 'spring'
@@ -40,7 +41,8 @@ gem_group :development do
   gem 'rack-mini-profiler'
   gem 'quiet_assets'
   gem 'bullet'
-  gem 'web-console'
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 gem_group :test do
@@ -55,7 +57,6 @@ end
 
 gem_group :production do
   gem 'rails_12factor'
-  gem 'puma'
 end
 
 remove_file ".gitignore"
@@ -105,7 +106,7 @@ end
 after_bundle do
   run "spring stop"
   
-  generate 'rspec:install'
+  run "DISABLE_SPRING=1 rails generate rspec:install"
   
   inside 'spec' do
     empty_directory "classes"
@@ -135,16 +136,23 @@ after_bundle do
   
   run "createuser --superuser #{app_name}"
   rake "db:create"
-  generate "migration", "create_users"
+  run "DISABLE_SPRING=1 rails generate migration create_users"
   user_migration_file = Dir.glob("db/migrate/*.rb").first
   remove_file user_migration_file
   copy_file "db/migrate/create_users.rb", user_migration_file
   rake "db:migrate"
   
-  append_to_file 'db/seeds.rb', 'User.create!(email: "vdaubry@gmail.com", password: "azerty")'
+  append_to_file 'db/seeds.rb', 'User.create!(email: "vdaubry@gmail.com", password: "azerty", admin: true)'
+  rake "db:seed"
   
   rake "db:create", env: :test
   rake "db:migrate", env: :test
+  
+  remove_file "app/controllers/admin/users_controller.rb" #skip is ignored by administrate when generating user_controller...
+  run "DISABLE_SPRING=1 rails generate administrate:install --skip"
+  remove_file "app/controllers/admin/users_controller.rb"
+  copy_file "app/custom_controllers/admin/users_controller.rb", "app/controllers/admin/users_controller.rb"
+  
   run "rspec"
   
   git :init
