@@ -14,6 +14,11 @@ run "touch Gemfile"
 
 add_source 'https://rubygems.org'
 
+
+inject_into_file 'Gemfile', :after => "'https://rubygems.org'" do
+  "\n\nruby '2.2.3'"
+end
+
 gem 'rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -33,13 +38,13 @@ gem 'administrate'
 
 gem_group :development, :test do
   gem 'spring'
+  gem 'spring-commands-rspec'
   gem 'pry-rails'
 end
 
 gem_group :development do
   gem 'dotenv-rails'
   gem 'rack-mini-profiler'
-  gem 'quiet_assets'
   gem 'bullet'
   gem 'better_errors'
   gem 'binding_of_caller'
@@ -65,6 +70,7 @@ copy_file ".env"
 copy_file "Procfile"
 
 remove_dir "test"
+directory "custom_test", "test"
 
 inside 'config' do
   copy_file "puma.rb"
@@ -82,7 +88,7 @@ end
 inside 'app' do
   empty_directory "classes"
   inside 'classes' do
-    empty_directory "presenters"
+    directory "presenters"
     empty_directory "workers"
     empty_directory "serializers"
     empty_directory "validators"
@@ -101,6 +107,9 @@ inside 'app' do
   
   copy_file "assets/stylesheets/landing-page.css"
   copy_file "assets/stylesheets/signin.css"
+  copy_file "assets/javascript/google_analytics.js.coffee"
+  
+  directory "mailers"
 end
 
 after_bundle do
@@ -110,6 +119,14 @@ after_bundle do
   
   inside 'spec' do
     empty_directory "classes"
+    inside 'classes' do
+      empty_directory "presenters"
+      empty_directory "workers"
+      empty_directory "serializers"
+      empty_directory "validators"
+      empty_directory "builders"
+    end
+    
     empty_directory "factories"
     empty_directory "jobs"
     
@@ -123,15 +140,23 @@ after_bundle do
     directory "factories"
   end
   
-  inside 'config/environments' do
-    remove_file "development.rb"
-    copy_file "development_template.rb", "development.rb"
+  inside 'config' do
+    copy_file "locales/fr.yml"
     
-    remove_file "test.rb"
-    copy_file "test_template.rb", "test.rb"
+    remove_file "application.rb"
+    copy_file "application_template.rb", "application.rb"
+    gsub_file 'application.rb', /%app_name%/, @app_name.capitalize
     
-    remove_file "production.rb"
-    copy_file "production_template.rb", "production.rb"
+    inside 'environments' do
+      remove_file "development.rb"
+      copy_file "development_template.rb", "development.rb"
+      
+      remove_file "test.rb"
+      copy_file "test_template.rb", "test.rb"
+      
+      remove_file "production.rb"
+      copy_file "production_template.rb", "production.rb"
+    end
   end
   
   run "createuser --superuser #{app_name}"

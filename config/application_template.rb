@@ -6,18 +6,19 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module EntourageBack
+module %app_name%
   class Application < Rails::Application
-    config.action_dispatch.default_headers.merge!({
-     'Access-Control-Allow-Origin' => '*',
-     'Access-Control-Request-Method' => '*'
-     });
-
-     config.generators do |g|
-       g.test_framework :rspec
-       g.view_specs false
-       g.helper_specs false
-     end
+    #Set the application in french
+    #config.time_zone = 'Paris'
+    #config.i18n.default_locale = :fr
+    
+    config.generators do |g|
+      g.test_framework :rspec
+      g.view_specs false
+      g.helper_specs false
+      g.fixture_replacement :factory_girl
+      g.factory_girl dir: 'spec/factories'
+    end
 
     config.active_job.queue_adapter = :sidekiq
 
