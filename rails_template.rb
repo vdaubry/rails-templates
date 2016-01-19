@@ -115,6 +115,9 @@ end
 after_bundle do
   run "spring stop"
   
+  #Add pessimistic constraint operator (~>) to all gems in your Gemfile, see : https://github.com/joonty/pessimize
+  run "pessimize"
+  
   run "DISABLE_SPRING=1 rails generate rspec:install"
   
   inside 'spec' do
