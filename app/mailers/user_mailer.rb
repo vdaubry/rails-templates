@@ -5,3 +5,4 @@ class MemberMailer < ActionMailer::Base
     @user = user
     mail(to: @user.email, subject: 'Welcome')
   end
+end
