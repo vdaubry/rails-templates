@@ -36,7 +36,6 @@ module %app_name%
     config.action_mailer.default_url_options = { host: ENV['HOST'] }
     config.action_mailer.perform_deliveries = true
     config.action_mailer.delivery_method = :smtp
-    config.asset_host = "http://#{ENV['HOST']}"
 
     #lograge
     config.lograge.enabled = true

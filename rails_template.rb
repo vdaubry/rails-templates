@@ -119,18 +119,7 @@ after_bundle do
   
   git :init
   git add: "."
-  git commit: "-a -m 'Initial commit'"
-  
-  #capistrano
-  run "DISABLE_SPRING=1 bundle exec cap install"
-  inside 'config' do
-    remove_file "deploy.rb"
-    run "rm -Rf deploy"
-    copy_file "deploy.rb"
-    gsub_file 'deploy.rb', /%app_name%/, @app_name
-    directory "deploy"
-  end
-  
+  git commit: "-a -m 'Initial commit'"  
   
   #Add pessimistic constraint operator (~>) to all gems in your Gemfile, see : https://github.com/joonty/pessimize
   run "pessimize"
@@ -198,6 +187,15 @@ after_bundle do
   remove_file "app/controllers/admin/users_controller.rb"
   copy_file "app/custom_controllers/admin/users_controller.rb", "app/controllers/admin/users_controller.rb"
   
+  #capistrano
+  run "DISABLE_SPRING=1 bundle exec cap install"
+  inside 'config' do
+    remove_file "deploy.rb"
+    run "rm -Rf deploy"
+    copy_file "deploy.rb"
+    gsub_file 'deploy.rb', /%app_name%/, @app_name
+    directory "deploy"
+  end
 
   #github
   #git add remote origin "git@github.com:vdaubry/#{app_name}.git"
