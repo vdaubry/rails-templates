@@ -92,7 +92,6 @@ inside 'app' do
   inside 'classes' do
     directory "presenters"
     empty_directory "workers"
-    empty_directory "serializers"
     empty_directory "validators"
     empty_directory "builders"
   end
@@ -112,6 +111,7 @@ inside 'app' do
   copy_file "assets/javascript/google_analytics.js.coffee"
   
   directory "mailers"
+  directory "serializers"
 end
 
 after_bundle do
