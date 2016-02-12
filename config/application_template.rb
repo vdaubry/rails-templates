@@ -8,6 +8,7 @@ Bundler.require(*Rails.groups)
 
 module %app_name%
   class Application < Rails::Application
+    config.middleware.use Rack::Deflater
     #Set the application in french
     #config.time_zone = 'Paris'
     #config.i18n.default_locale = :fr
