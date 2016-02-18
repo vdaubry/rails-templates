@@ -4,4 +4,12 @@ Rails.application.routes.draw do
   resources :sessions, only: [:new, :create, :destroy]
   
   get 'about' => 'home#about'
+  
+  #API
+  namespace :api do
+    namespace :v0 do
+      get 'check' => 'base#check'
+    end
+  end
+  
 end

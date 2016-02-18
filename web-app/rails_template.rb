@@ -16,7 +16,7 @@ add_source 'https://rubygems.org'
 
 
 inject_into_file 'Gemfile', :after => "'https://rubygems.org'" do
-  "\n\nruby '2.2.3'"
+  "\n\nruby '2.3.0'"
 end
 
 gem 'rails'
@@ -50,6 +50,8 @@ gem_group :development do
   gem 'binding_of_caller'
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
+  gem 'derailed'
+  gem 'stackprof'
 end
 
 gem_group :test do
@@ -176,6 +178,7 @@ after_bundle do
   copy_file "db/migrate/create_users.rb", user_migration_file
   rake "db:migrate"
   
+  append_to_file 'db/seeds.rb', 'User.destroy_all\n'
   append_to_file 'db/seeds.rb', 'User.create!(email: "vdaubry@gmail.com", password: "azerty", admin: true)'
   rake "db:seed"
   
@@ -186,6 +189,7 @@ after_bundle do
   run "DISABLE_SPRING=1 rails generate administrate:install --skip"
   remove_file "app/controllers/admin/users_controller.rb"
   copy_file "app/custom_controllers/admin/users_controller.rb", "app/controllers/admin/users_controller.rb"
+  copy_file "app/dashboards/user_dashboard.rb", "app/dashboards/user_dashboard.rb"
   
   #capistrano
   run "DISABLE_SPRING=1 bundle exec cap install"
