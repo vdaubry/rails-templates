@@ -5,10 +5,6 @@ module Api
       before_filter :validate_request!
       before_filter :authenticate_user!, except: [:check]
 
-      rescue_from StandardError do |e|
-        render json: {code: "EXCEPTION", message: "You request raised an exception: #{e.message}"}, status: 500
-      end
-
       def allow_cors
         headers["Access-Control-Allow-Origin"] = "*"
         headers["Access-Control-Allow-Methods"] = %w{GET POST PUT DELETE}.join(",")
@@ -38,10 +34,6 @@ module Api
 
       def check
         render json: {status: :ok}
-      end
-
-      def error_404
-        render_error(code: "PAGE_NOT_FOUND", message: "The endpoint you called doesn't exist", status: 404)
       end
 
       def render_error(code:, message:, status:)

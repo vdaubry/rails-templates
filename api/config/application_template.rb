@@ -3,8 +3,6 @@ require File.expand_path('../boot', __FILE__)
 require "active_record/railtie"
 require "action_controller/railtie"
 require "action_mailer/railtie"
-#require "sprockets/railtie"
-#require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -14,7 +12,8 @@ module %app_name%
   class Application < Rails::Application
     config.api_only = true
     config.debug_exception_response_format = :api
-    config.middleware.use Rack::Deflater
+    config.middleware.use Rack::Deflater #GZIP response
+    config.exceptions_app = self.routes #custom response for /404 and /500
     #Set the application in french
     #config.time_zone = 'Paris'
     #config.i18n.default_locale = :fr

@@ -8,5 +8,6 @@ Rails.application.routes.draw do
     end
   end
   
-  match '*path', via: :all, to: 'api/v0/base#error_404'
+  get "/404" => "errors#not_found"
+  get "/500" => "errors#exception"
 end
