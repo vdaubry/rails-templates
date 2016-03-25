@@ -76,6 +76,12 @@ copy_file "Procfile"
 remove_dir "test"
 directory "custom_test", "test"
 
+#DB config
+db_conf_file = "config/database.yml"
+db_conf = YAML.load_file db_conf_file
+db_conf["pool"] = "<%= ENV['MAX_THREADS'] || 5 %>"
+File.open(db_conf_file, 'w') { |f| YAML.dump(db_conf, f) }
+
 inside 'config' do
   copy_file "puma.rb"
   remove_file "routes.rb"
