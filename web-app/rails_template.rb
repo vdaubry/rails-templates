@@ -60,6 +60,7 @@ gem_group :development do
   gem 'capistrano-bundler'
   gem 'derailed'
   gem 'stackprof'
+  gem 'letter_opener'
 end
 
 gem_group :test do
