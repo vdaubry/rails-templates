@@ -30,13 +30,20 @@ gem 'newrelic_rpm'
 gem 'kaminari'
 gem 'redis'
 gem 'bcrypt'
-gem 'sentry-raven'
 gem 'sidekiq'
 gem 'lograge'
 gem 'aws-sdk'
 gem 'administrate'
 
+#Add for local performance profiling
+gem 'rack-mini-profiler'
+gem 'memory_profiler'
+gem 'flamegraph'
+gem 'stackprof'
+gem 'ruby-prof'
+
 gem_group :development, :test do
+  gem 'byebug'
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'pry-rails'
@@ -44,14 +51,12 @@ end
 
 gem_group :development do
   gem 'dotenv-rails'
-  gem 'rack-mini-profiler'
   gem 'bullet'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
   gem 'derailed'
-  gem 'stackprof'
 end
 
 gem_group :test do
@@ -66,6 +71,7 @@ end
 
 gem_group :production do
   gem 'rails_12factor'
+  gem 'sentry-raven'
 end
 
 remove_file ".gitignore"
