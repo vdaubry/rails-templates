@@ -33,6 +33,14 @@ gem 'sidekiq'
 gem 'lograge'
 gem 'aws-sdk'
 
+#Add for performance profiling
+gem 'rack-mini-profiler'
+gem 'memory_profiler'
+gem 'flamegraph'
+gem 'stackprof'
+gem 'ruby-prof'
+gem 'benchmark-ips'
+
 
 gem_group :development, :test do
   gem 'spring'
@@ -48,6 +56,7 @@ gem_group :development do
   gem 'capistrano-bundler'
   gem 'derailed'
   gem 'stackprof'
+  gem 'letter_opener'
 end
 
 gem_group :test do

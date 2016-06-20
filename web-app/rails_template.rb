@@ -41,6 +41,7 @@ gem 'memory_profiler'
 gem 'flamegraph'
 gem 'stackprof'
 gem 'ruby-prof'
+gem 'benchmark-ips'
 
 gem_group :development, :test do
   gem 'byebug'
@@ -57,6 +58,7 @@ gem_group :development do
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
   gem 'derailed'
+  gem 'letter_opener'
 end
 
 gem_group :test do
