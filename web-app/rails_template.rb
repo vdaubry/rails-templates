@@ -31,7 +31,6 @@ gem 'newrelic_rpm'
 gem 'kaminari'
 gem 'redis'
 gem 'bcrypt'
-gem 'sentry-raven'
 gem 'sidekiq'
 gem 'lograge'
 gem 'aws-sdk'
@@ -46,6 +45,7 @@ gem 'aws-sdk'
 # gem 'benchmark-ips'
 
 gem_group :development, :test do
+  gem 'byebug'
   gem 'spring'
   gem 'spring-watcher-listen'
   gem 'spring-commands-rspec'
@@ -55,14 +55,12 @@ end
 gem_group :development do
   gem 'web-console'
   gem 'dotenv-rails'
-  gem 'rack-mini-profiler'
   gem 'bullet'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
   gem 'derailed'
-  gem 'stackprof'
   gem 'letter_opener'
 end
 
@@ -78,6 +76,7 @@ end
 
 gem_group :production do
   gem 'rails_12factor'
+  gem 'sentry-raven'
 end
 
 remove_file ".gitignore"
