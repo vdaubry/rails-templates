@@ -200,11 +200,15 @@ after_bundle do
     directory "deploy"
   end
 
-  #github
-  #git add remote origin "git@github.com:vdaubry/#{app_name}.git"
-  
   run "rspec"
   
   git add: "."
   git commit: "-a -m 'Setup app'"
+  
+  #github
+  run "git remote add origin git@github.com:vdaubry/#{@app_name}.git"
+  
+  #heroku
+  run "git remote add production git@heroku.com:#{@app_name}.git"
+  run "heroku pg:backups schedule DATABASE_URL --at '02:00 Europe/Paris' -a #{@app_name}"
 end

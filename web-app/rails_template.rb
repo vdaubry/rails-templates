@@ -1,14 +1,15 @@
 require 'fileutils'
 require 'byebug'
+require 'yaml'
 
 # Add the current directory to the path Thor uses
 # to look up files
 def source_paths
   Array(super) + 
-    [File.expand_path(File.dirname(__FILE__)), "/Users/vincentdaubry/Documents/Projets/templates/app/views/layouts"]
+    [File.expand_path(File.dirname(__FILE__))]
 end
 
-# We'll be building the Gemfile from scratch
+#We'll be building the Gemfile from scratch
 remove_file "Gemfile"
 run "touch Gemfile"
 
@@ -16,16 +17,16 @@ add_source 'https://rubygems.org'
 
 
 inject_into_file 'Gemfile', :after => "'https://rubygems.org'" do
-  "\n\nruby '2.3.0'"
+  "\n\nruby '2.3.1'"
 end
 
-gem 'rails'
+gem 'rails', '>= 5.0'
+gem 'pg'
+gem 'puma'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
+gem 'coffee-rails'
 gem 'turbolinks'
-gem 'active_model_serializers'
-gem 'puma'
-gem 'pg'
 gem 'newrelic_rpm'
 gem 'kaminari'
 gem 'redis'
@@ -34,23 +35,25 @@ gem 'sentry-raven'
 gem 'sidekiq'
 gem 'lograge'
 gem 'aws-sdk'
-gem 'administrate'
+#gem 'administrate' #administrate is not rails5 compatible yet : https://github.com/thoughtbot/administrate/pull/575
 
 #Add for performance profiling
-gem 'rack-mini-profiler'
-gem 'memory_profiler'
-gem 'flamegraph'
-gem 'stackprof'
-gem 'ruby-prof'
-gem 'benchmark-ips'
+# gem 'rack-mini-profiler'
+# gem 'memory_profiler'
+# gem 'flamegraph'
+# gem 'stackprof'
+# gem 'ruby-prof'
+# gem 'benchmark-ips'
 
 gem_group :development, :test do
   gem 'spring'
+  gem 'spring-watcher-listen'
   gem 'spring-commands-rspec'
   gem 'pry-rails'
 end
 
 gem_group :development do
+  gem 'web-console'
   gem 'dotenv-rails'
   gem 'rack-mini-profiler'
   gem 'bullet'
@@ -125,7 +128,7 @@ inside 'app' do
   
   copy_file "assets/stylesheets/landing-page.css"
   copy_file "assets/stylesheets/signin.css"
-  copy_file "assets/javascript/google_analytics.js.coffee"
+  copy_file "assets/javascripts/google_analytics.js.coffee"
   
   directory "mailers"
   directory "serializers"
@@ -165,7 +168,7 @@ after_bundle do
     directory "models"
     directory "factories"
   end
-  
+
   inside 'config' do
     copy_file "locales/fr.yml"
     
@@ -193,18 +196,21 @@ after_bundle do
   copy_file "db/migrate/create_users.rb", user_migration_file
   rake "db:migrate"
   
-  append_to_file 'db/seeds.rb', 'User.destroy_all\n'
-  append_to_file 'db/seeds.rb', 'User.create!(email: "vdaubry@gmail.com", password: "azerty", admin: true)'
+  append_to_file 'db/seeds.rb' do
+    'User.destroy_all'
+    'User.create!(email: "vdaubry@gmail.com", password: "azerty", admin: true)'
+  end
   rake "db:seed"
   
   rake "db:create", env: :test
   rake "db:migrate", env: :test
   
-  remove_file "app/controllers/admin/users_controller.rb" #skip is ignored by administrate when generating user_controller...
-  run "DISABLE_SPRING=1 rails generate administrate:install --skip"
-  remove_file "app/controllers/admin/users_controller.rb"
-  copy_file "app/custom_controllers/admin/users_controller.rb", "app/controllers/admin/users_controller.rb"
-  copy_file "app/dashboards/user_dashboard.rb", "app/dashboards/user_dashboard.rb"
+  # Administrate not compatible with Rails 5
+  # remove_file "app/controllers/admin/users_controller.rb" #skip is ignored by administrate when generating user_controller...
+  # run "DISABLE_SPRING=1 rails generate administrate:install --skip"
+  # remove_file "app/controllers/admin/users_controller.rb"
+  # copy_file "app/custom_controllers/admin/users_controller.rb", "app/controllers/admin/users_controller.rb"
+  # copy_file "app/dashboards/user_dashboard.rb", "app/dashboards/user_dashboard.rb"
   
   #capistrano
   run "DISABLE_SPRING=1 bundle exec cap install"
@@ -215,12 +221,16 @@ after_bundle do
     gsub_file 'deploy.rb', /%app_name%/, @app_name
     directory "deploy"
   end
-
-  #github
-  #git add remote origin "git@github.com:vdaubry/#{app_name}.git"
   
   run "rspec"
   
   git add: "."
   git commit: "-a -m 'Setup app'"
+  
+  #github
+  run "git remote add origin git@github.com:vdaubry/#{@app_name}.git"
+  
+  #heroku
+  run "git remote add production git@heroku.com:#{@app_name}.git"
+  run "heroku pg:backups schedule DATABASE_URL --at '02:00 Europe/Paris' -a #{@app_name}"
 end
