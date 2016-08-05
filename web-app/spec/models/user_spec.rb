@@ -5,13 +5,13 @@ describe User do
   let(:user) { FactoryGirl.create(:user) }
   
   describe "validation" do
-    it { FactoryGirl.build(:user).save.should == true }
+    it { expect(FactoryGirl.build(:user).save).to be true }
     it { should validate_presence_of :email }
     it { should validate_presence_of :password }
 
     it "enforces unique email" do
-      FactoryGirl.build(:user, email: "foo@bar.com").save.should == true
-      FactoryGirl.build(:user, email: "foo@bar.com").save.should == false
+      expect(FactoryGirl.build(:user, email: "foo@bar.com").save).to be true
+      expect(FactoryGirl.build(:user, email: "foo@bar.com").save).to be false
     end
   end
   
@@ -19,12 +19,12 @@ describe User do
     it "encrypts password" do
       user = FactoryGirl.create(:user, password: "foo")
       saved_user = User.first
-      saved_user.password_digest.should_not == "foo"
-      saved_user.password.should == nil
+      expect(saved_user.password_digest).to_not eq("foo")
+      expect(saved_user.password).to be nil
     end
 
     it "fails if password confirmation doesn't match" do
-      FactoryGirl.build(:user, password: "foo", password_confirmation: "foo1").save.should == false
+      expect(FactoryGirl.build(:user, password: "foo", password_confirmation: "foo1").save).to be false
     end
   end
   
@@ -33,14 +33,14 @@ describe User do
       old_encrypted_password = user.password_digest
       user.password = "new pass"
       user.save
-      user.reload.password_digest.should_not == old_encrypted_password
+      expect(user.reload.password_digest).to_not eq(old_encrypted_password)
     end
     
     it "doesn't encrypt password when password doesn't change" do
       old_encrypted_password = user.password_digest
       user.email = "new@email.com"
       user.save
-      user.reload.password_digest.should == old_encrypted_password
+      expect(user.reload.password_digest).to eq(old_encrypted_password)
     end
   end
   

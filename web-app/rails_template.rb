@@ -72,6 +72,7 @@ gem_group :test do
   gem 'webmock'
   gem 'fakeredis'
   gem 'vcr'
+  gem 'rails-controller-testing'
 end
 
 gem_group :production do
@@ -110,8 +111,9 @@ inside 'app' do
   empty_directory "classes"
   inside 'classes' do
     directory "presenters"
+    directory "validators"
+    directory "user_services"
     empty_directory "workers"
-    empty_directory "validators"
     empty_directory "builders"
   end
   
