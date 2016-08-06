@@ -34,12 +34,12 @@ gem 'lograge'
 gem 'aws-sdk'
 
 #Add for performance profiling
-gem 'rack-mini-profiler'
-gem 'memory_profiler'
-gem 'flamegraph'
-gem 'stackprof'
-gem 'ruby-prof'
-gem 'benchmark-ips'
+# gem 'rack-mini-profiler'
+# gem 'memory_profiler'
+# gem 'flamegraph'
+# gem 'stackprof'
+# gem 'ruby-prof'
+# gem 'benchmark-ips'
 
 
 gem_group :development, :test do
@@ -52,8 +52,8 @@ gem_group :development do
   gem 'dotenv-rails'
   gem 'rack-mini-profiler'
   gem 'bullet'
-  gem 'capistrano-rails'
-  gem 'capistrano-bundler'
+  #gem 'capistrano-rails'
+  #gem 'capistrano-bundler'
   gem 'derailed'
   gem 'stackprof'
   gem 'letter_opener'
@@ -191,14 +191,14 @@ after_bundle do
   rake "db:migrate", env: :test
   
   #capistrano
-  run "DISABLE_SPRING=1 bundle exec cap install"
-  inside 'config' do
-    remove_file "deploy.rb"
-    run "rm -Rf deploy"
-    copy_file "deploy.rb"
-    gsub_file 'deploy.rb', /%app_name%/, @app_name
-    directory "deploy"
-  end
+  # run "DISABLE_SPRING=1 bundle exec cap install"
+  # inside 'config' do
+  #   remove_file "deploy.rb"
+  #   run "rm -Rf deploy"
+  #   copy_file "deploy.rb"
+  #   gsub_file 'deploy.rb', /%app_name%/, @app_name
+  #   directory "deploy"
+  # end
 
   run "rspec"
   

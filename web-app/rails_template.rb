@@ -58,8 +58,8 @@ gem_group :development do
   gem 'bullet'
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'capistrano-rails'
-  gem 'capistrano-bundler'
+  #gem 'capistrano-rails'
+  #gem 'capistrano-bundler'
   gem 'derailed'
   gem 'letter_opener'
 end
@@ -214,14 +214,14 @@ after_bundle do
   # copy_file "app/dashboards/user_dashboard.rb", "app/dashboards/user_dashboard.rb"
   
   #capistrano
-  run "DISABLE_SPRING=1 bundle exec cap install"
-  inside 'config' do
-    remove_file "deploy.rb"
-    run "rm -Rf deploy"
-    copy_file "deploy.rb"
-    gsub_file 'deploy.rb', /%app_name%/, @app_name
-    directory "deploy"
-  end
+  # run "DISABLE_SPRING=1 bundle exec cap install"
+  # inside 'config' do
+  #   remove_file "deploy.rb"
+  #   run "rm -Rf deploy"
+  #   copy_file "deploy.rb"
+  #   gsub_file 'deploy.rb', /%app_name%/, @app_name
+  #   directory "deploy"
+  # end
   
   run "rspec"
   
