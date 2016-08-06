@@ -17,6 +17,7 @@ module %app_name%
       g.test_framework :rspec
       g.view_specs false
       g.helper_specs false
+      g.assets false
       g.routing_specs false
       g.fixture_replacement :factory_girl
       g.factory_girl dir: 'spec/factories'
