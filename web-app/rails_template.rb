@@ -71,7 +71,6 @@ gem_group :test do
   gem 'factory_girl_rails'
   gem 'webmock'
   gem 'fakeredis'
-  gem 'vcr'
   gem 'rails-controller-testing'
 end
 

@@ -1,5 +1,4 @@
 require 'webmock/rspec'
-require 'vcr'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

@@ -1,5 +1,6 @@
 require 'fileutils'
 require 'byebug'
+require 'yaml'
 
 # Add the current directory to the path Thor uses
 # to look up files
@@ -16,11 +17,10 @@ add_source 'https://rubygems.org'
 
 
 inject_into_file 'Gemfile', :after => "'https://rubygems.org'" do
-  "\n\nruby '2.3.0'"
+  "\n\nruby '2.3.1'"
 end
 
 gem 'rails'
-gem 'rails-api'
 gem 'active_model_serializers'
 gem 'puma'
 gem 'pg'
@@ -46,6 +46,8 @@ gem_group :development, :test do
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'pry-rails'
+  gem 'listen', '~> 3.0.5'
+  gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
 gem_group :development do
@@ -66,7 +68,6 @@ gem_group :test do
   gem 'factory_girl_rails'
   gem 'webmock'
   gem 'fakeredis'
-  gem 'vcr'
 end
 
 gem_group :production do
@@ -84,7 +85,7 @@ directory "custom_test", "test"
 #DB config
 db_conf_file = "config/database.yml"
 db_conf = YAML.load_file db_conf_file
-db_conf["pool"] = "<%= ENV['MAX_THREADS'] || 5 %>"
+db_conf["pool"] = "<%= ENV.fetch('RAILS_MAX_THREADS') { 5 } %>"
 File.open(db_conf_file, 'w') { |f| YAML.dump(db_conf, f) }
 
 inside 'config' do
@@ -176,15 +177,17 @@ after_bundle do
   end
   
   run "createuser --superuser #{app_name}"
-  rake "db:create"
+  rake "db:drop db:create"
   run "DISABLE_SPRING=1 rails generate migration create_users"
   user_migration_file = Dir.glob("db/migrate/*.rb").first
   remove_file user_migration_file
   copy_file "db/migrate/create_users.rb", user_migration_file
   rake "db:migrate"
   
-  append_to_file 'db/seeds.rb', 'User.destroy_all\n'
-  append_to_file 'db/seeds.rb', 'User.create!(email: "vdaubry@gmail.com", password: "azerty", token: "azerty", admin: true)'
+  append_to_file 'db/seeds.rb' do
+    'User.destroy_all'
+    'User.create!(email: "vdaubry@gmail.com", password: "azerty", token: "azerty", admin: true)'
+  end
   rake "db:seed"
   
   rake "db:create", env: :test
@@ -208,12 +211,12 @@ after_bundle do
   #github
   run "git remote add origin git@github.com:vdaubry/#{@app_name}.git"
   
-  #heroku
-  run "git remote add production git@heroku.com:#{@app_name}.git"
-  run "heroku pg:backups schedule DATABASE_URL --at '02:00 Europe/Paris' -a #{@app_name}"
+  # #heroku
+  # run "git remote add production git@heroku.com:#{@app_name}.git"
+  # run "heroku pg:backups schedule DATABASE_URL --at '02:00 Europe/Paris' -a #{@app_name}"
   
-  #heroku run rake task buildpack
-  run "heroku buildpacks:set https://github.com/heroku/heroku-buildpack-ruby"
-  run "heroku buildpacks:add https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks"
-  run "heroku config:set DEPLOY_TASKS='db:migrate'"
+  # #heroku run rake task buildpack
+  # run "heroku buildpacks:set https://github.com/heroku/heroku-buildpack-ruby"
+  # run "heroku buildpacks:add https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks"
+  # run "heroku config:set DEPLOY_TASKS='db:migrate'"
 end

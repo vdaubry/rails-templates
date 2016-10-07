@@ -19,10 +19,3 @@ RSpec.configure do |config|
     ActionMailer::Base.deliveries.clear
   end
 end
-
-VCR.configure do |c|
-  c.cassette_library_dir = 'spec/fixtures/cassette_library'
-  c.hook_into :webmock
-  c.default_cassette_options = { :record => :new_episodes }
-  c.configure_rspec_metadata!
-end

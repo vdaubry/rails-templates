@@ -2,8 +2,6 @@ require 'rails_helper'
 
 describe User do
   
-  let(:user) { FactoryGirl.create(:user) }
-  
   describe "validation" do
     it { FactoryGirl.build(:user).save.should == true }
     it { should validate_presence_of :email }
@@ -11,42 +9,42 @@ describe User do
     it { should validate_presence_of :token }
 
     it "enforces unique email" do
-      FactoryGirl.build(:user, email: "foo@bar.com").save.should == true
-      FactoryGirl.build(:user, email: "foo@bar.com").save.should == false
+      expect(FactoryGirl.build(:user, email: "foo@bar.com").save).to be true
+      expect(FactoryGirl.build(:user, email: "foo@bar.com").save).to be false
     end
     
     it "enforces unique token" do
-      FactoryGirl.build(:user, token: "foobar").save.should == true
-      FactoryGirl.build(:user, token: "foobar").save.should == false
+      expect(FactoryGirl.build(:user, token: "foobar").save).to be true
+      expect(FactoryGirl.build(:user, token: "foobar").save).to be false
     end
   end
   
   describe "create" do
-    it "encrypts password" do
-      user = FactoryGirl.create(:user, password: "foo")
-      saved_user = User.first
-      saved_user.password_digest.should_not == "foo"
-      saved_user.password.should == nil
+    describe "encrypts password" do
+      let!(:user) { FactoryGirl.create(:user, password: "foo") }
+      let(:saved_user) { User.first }
+      it { expect(saved_user.password_digest).to_not eq("foo") }
+      it { expect(saved_user.password).to be nil }
     end
-
-    it "fails if password confirmation doesn't match" do
-      FactoryGirl.build(:user, password: "foo", password_confirmation: "foo1").save.should == false
+    
+    describe "password confirmation doesn't match" do
+      it { expect(FactoryGirl.build(:user, password: "foo", password_confirmation: "foo1").save).to be false }
     end
   end
   
   describe "update" do
-    it "encrypts password when password changes" do
-      old_encrypted_password = user.password_digest
-      user.password = "new pass"
-      user.save
-      user.reload.password_digest.should_not == old_encrypted_password
+    let!(:user) { FactoryGirl.create(:user) }
+    
+    describe "encrypts password when password changes" do  
+      let!(:old_encrypted_password) { user.password_digest }
+      before { user.update(password: "new_pass")}
+      it { expect(user.reload.password_digest).to_not eq(old_encrypted_password) }
     end
     
-    it "doesn't encrypt password when password doesn't change" do
-      old_encrypted_password = user.password_digest
-      user.email = "new@email.com"
-      user.save
-      user.reload.password_digest.should == old_encrypted_password
+    describe "doesn't encrypt password when password doesn't change" do
+      let!(:old_encrypted_password) { user.password_digest }
+      before { user.update(email: "new@email.com")}
+      it { expect(user.reload.password_digest).to eq(old_encrypted_password) }
     end
   end
   
