@@ -3,7 +3,7 @@ A template for new rails propjects
 
 ## Usage :
 
-``` rails-api new your_project_name --database=postgresql -m path_to_rails_templates/rails_api_template.rb ```
+``` rails new your_project_name --api --database=postgresql -m path_to_rails_templates/rails_api_template.rb ```
 
 ## dependencies :
 

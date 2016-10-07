@@ -75,6 +75,10 @@ gem_group :test do
   gem 'rails-controller-testing'
 end
 
+group :assets do
+  gem 'uglifier'
+end
+
 gem_group :production do
   gem 'rails_12factor'
   gem 'sentry-raven'
@@ -234,4 +238,9 @@ after_bundle do
   #heroku
   run "git remote add production git@heroku.com:#{@app_name}.git"
   run "heroku pg:backups schedule DATABASE_URL --at '02:00 Europe/Paris' -a #{@app_name}"
+  
+  #heroku run rake task buildpack
+  run "heroku buildpacks:set https://github.com/heroku/heroku-buildpack-ruby"
+  run "heroku buildpacks:add https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks"
+  run "heroku config:set DEPLOY_TASKS='db:migrate'"
 end
