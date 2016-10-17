@@ -11,9 +11,11 @@ module Validators
     private
     attr_reader :api_key
     
+    #Generate with SecureRandom.hex(6)
     def api_keys
       @api_keys ||= { 
-        "unit_test" => {app_version: "unit_test"}
+        "unit_test" => {platform: "test", app_version: "unit_test"},
+        "..." => {platform: "ios", app_version: "1.0"},
       }
     end
   end
