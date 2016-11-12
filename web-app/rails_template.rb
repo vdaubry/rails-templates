@@ -87,6 +87,7 @@ remove_file ".gitignore"
 copy_file ".gitignore"
 copy_file ".env"
 copy_file "Procfile"
+directory "tmp"
 
 remove_dir "test"
 directory "custom_test", "test"
