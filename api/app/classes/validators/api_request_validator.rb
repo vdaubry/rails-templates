@@ -16,7 +16,7 @@ module Validators
   attr_reader :params, :headers, :env
 
   def api_key
-    headers['X-API-Key'] || env['X-API-Key']
+    headers['X-API-Key'] || env['X-API-Key'] || env['HTTP_X_API_KEY']
   end
 end
 

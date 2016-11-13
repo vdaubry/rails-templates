@@ -3,9 +3,9 @@ module Api
     class BaseController < ApplicationController
       DEFAULT_PAGE_COUNT=25
       
-      before_filter :allow_cors
-      before_filter :validate_request!
-      before_filter :authenticate_user!, except: [:check]
+      before_action :allow_cors
+      before_action :validate_request!
+      before_action :authenticate_user!, except: [:check]
       before_action :set_language
 
       def allow_cors
@@ -21,9 +21,9 @@ module Api
       def current_user
         @current_user ||= User.where(token: token).first
       end
-      
+
       def token
-        request.env['X-AUTH-TOKEN'] || request.env['HTTP_X_AUTH_TOKEN'] || params[:token]
+        bearer && bearer.split("Bearer ")[1]
       end
 
       def authenticate_user!
@@ -53,6 +53,12 @@ module Api
 
       def count
         [(params[:count].try(:to_i) || DEFAULT_PAGE_COUNT), DEFAULT_PAGE_COUNT].min
+      end
+
+
+      private
+      def bearer
+        request.env['Authorization'] || request.env['HTTP_AUTHORIZATION'] || params[:token]
       end
       
       def set_language
