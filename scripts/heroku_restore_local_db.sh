@@ -5,11 +5,13 @@ PROD="welovefootball"
 STAGING="welovefootball-staging"
 LOCAL_DB_NAME=welovefootball_development
 
-if [ $1 == "prod" ]; then
+if [[ $1 == "prod" ]]; then
   current=$PROD
 else
+  echo "To run on production DB, use ./scripts/restore_local_db.sh prod"
   current=$STAGING
 fi
+
 
 echo "CLOSE ALL PROGRAMS USING THE DATABASE : Ruby web server, SQL client, etc"
 lsof -t -i tcp:3000 | xargs kill -9

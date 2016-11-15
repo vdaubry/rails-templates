@@ -231,7 +231,7 @@ after_bundle do
   git add: "."
   git commit: "-a -m 'Setup app'"
   
-  directory "scripts"
+  directory "../scripts"
   
   # #github
   # run "git remote add origin git@github.com:vdaubry/#{@app_name}.git"
