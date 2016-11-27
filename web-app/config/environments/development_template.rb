@@ -16,6 +16,9 @@ Rails.application.configure do
   # Do care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true
 
+  # Log to stdout in dev (rather than development.log)
+  config.logger = Logger.new(STDOUT)
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
