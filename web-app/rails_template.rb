@@ -34,7 +34,8 @@ gem 'bcrypt'
 gem 'sidekiq'
 gem 'lograge'
 gem 'aws-sdk'
-#gem 'administrate' #administrate is not rails5 compatible yet : https://github.com/thoughtbot/administrate/pull/575
+gem 'active_model_serializers'
+gem 'administrate', :git => 'git://github.com/thoughtbot/administrate.git'
 
 #Add for performance profiling
 # gem 'rack-mini-profiler'
@@ -74,7 +75,7 @@ gem_group :test do
   gem 'rails-controller-testing'
 end
 
-group :assets do
+gem_group :assets do
   gem 'uglifier'
 end
 
@@ -210,7 +211,6 @@ after_bundle do
   rake "db:create", env: :test
   rake "db:migrate", env: :test
   
-  # Administrate not compatible with Rails 5
   # remove_file "app/controllers/admin/users_controller.rb" #skip is ignored by administrate when generating user_controller...
   # run "DISABLE_SPRING=1 rails generate administrate:install --skip"
   # remove_file "app/controllers/admin/users_controller.rb"
@@ -232,15 +232,17 @@ after_bundle do
   git add: "."
   git commit: "-a -m 'Setup app'"
   
-  #github
-  run "git remote add origin git@github.com:vdaubry/#{@app_name}.git"
+  directory "../scripts"
   
-  #heroku
-  run "git remote add production git@heroku.com:#{@app_name}.git"
-  run "heroku pg:backups schedule DATABASE_URL --at '02:00 Europe/Paris' -a #{@app_name}"
+  # #github
+  # run "git remote add origin git@github.com:vdaubry/#{@app_name}.git"
   
-  #heroku run rake task buildpack
-  run "heroku buildpacks:set https://github.com/heroku/heroku-buildpack-ruby"
-  run "heroku buildpacks:add https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks"
-  run "heroku config:set DEPLOY_TASKS='db:migrate'"
+  # #heroku
+  # run "git remote add production git@heroku.com:#{@app_name}.git"
+  # run "heroku pg:backups schedule DATABASE_URL --at '02:00 Europe/Paris' -a #{@app_name}"
+  
+  # #heroku run rake task buildpack
+  # run "heroku buildpacks:set https://github.com/heroku/heroku-buildpack-ruby"
+  # run "heroku buildpacks:add https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks"
+  # run "heroku config:set DEPLOY_TASKS='db:migrate'"
 end

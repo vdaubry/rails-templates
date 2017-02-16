@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v0 do
       get 'check' => 'base#check'
+      
+      resources :users
     end
   end
   
