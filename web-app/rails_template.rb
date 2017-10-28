@@ -17,7 +17,7 @@ add_source 'https://rubygems.org'
 
 
 inject_into_file 'Gemfile', :after => "'https://rubygems.org'" do
-  "\n\nruby '2.4.0'"
+  "\n\nruby '2.4.2'"
 end
 
 gem 'rails', '>= 5.0'
@@ -231,7 +231,8 @@ after_bundle do
   git add: "."
   git commit: "-a -m 'Setup app'"
   
-  directory "../scripts"
+  directory "../scripts", "scripts"
+  run "chmod +x ./scripts/*"
   
   # #github
   # run "git remote add origin git@github.com:vdaubry/#{@app_name}.git"
