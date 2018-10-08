@@ -1,8 +1,14 @@
 Rails.application.routes.draw do
-  root :to => 'home#index'
-  
+  root to: 'admin/users#index'
+
+  namespace :admin do
+    root to: "users#index"
+
+    resources :users
+  end
+
   resources :sessions, only: [:new, :create, :destroy]
-  
+
   get 'about' => 'home#about'
   
   #API

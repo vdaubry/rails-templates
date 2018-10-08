@@ -3,31 +3,31 @@ require 'rails_helper'
 describe User do
   
   describe "validation" do
-    it { FactoryGirl.build(:user).save.should == true }
+    it { build(:user).save.should == true }
     it { should validate_presence_of :email }
     it { should validate_presence_of :password }
 
     it "enforces unique email" do
-      expect(FactoryGirl.build(:user, email: "foo@bar.com").save).to be true
-      expect(FactoryGirl.build(:user, email: "foo@bar.com").save).to be false
+      expect(build(:user, email: "foo@bar.com").save).to be true
+      expect(build(:user, email: "foo@bar.com").save).to be false
     end
   end
   
   describe "create" do
     describe "encrypts password" do
-      let!(:user) { FactoryGirl.create(:user, password: "foo") }
+      let!(:user) { create(:user, password: "foo") }
       let(:saved_user) { User.first }
       it { expect(saved_user.password_digest).to_not eq("foo") }
       it { expect(saved_user.password).to be nil }
     end
     
     describe "password confirmation doesn't match" do
-      it { expect(FactoryGirl.build(:user, password: "foo", password_confirmation: "foo1").save).to be false }
+      it { expect(build(:user, password: "foo", password_confirmation: "foo1").save).to be false }
     end
   end
   
   describe "update" do
-    let!(:user) { FactoryGirl.create(:user) }
+    let!(:user) { create(:user) }
     
     describe "encrypts password when password changes" do  
       let!(:old_encrypted_password) { user.password_digest }

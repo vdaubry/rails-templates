@@ -8,13 +8,14 @@ class UserDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-      id: Field::Number,
-      email: Field::String,
-      password_digest: Field::String,
-      admin: Field::Boolean,
-      created_at: Field::DateTime,
-      updated_at: Field::DateTime,
-  }
+    id: Field::Number,
+    admin: Field::Boolean,
+    email: Field::String,
+    password: Field::Password,
+    token: Field::String,
+    created_at: Field::DateTime,
+    updated_at: Field::DateTime,
+  }.freeze
 
   # COLLECTION_ATTRIBUTES
   # an array of attributes that will be displayed on the model's index page.
@@ -22,23 +23,25 @@ class UserDashboard < Administrate::BaseDashboard
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = [
-      :id,
-      :email,
-      :admin,
-  ]
+    :email
+  ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
-  SHOW_PAGE_ATTRIBUTES = ATTRIBUTE_TYPES.keys - [:password_digest]
+  SHOW_PAGE_ATTRIBUTES = [
+    :id,
+    :email,
+    :created_at,
+  ].freeze
 
   # FORM_ATTRIBUTES
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = [
-      :email,
-      :password_digest,
-      :admin,
-  ]
+    :email,
+    :admin,
+    :password,
+  ].freeze
 
   # Overwrite this method to customize how users are displayed
   # across all pages of the admin dashboard.

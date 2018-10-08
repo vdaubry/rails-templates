@@ -23,8 +23,6 @@ system "heroku pg:backups schedule DATABASE_URL --at '02:00 Europe/Paris' -a #{P
 system "heroku buildpacks:set https://github.com/heroku/heroku-buildpack-ruby -a #{PROD}"
 system "heroku buildpacks:add https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks -a #{PROD}"
 system "heroku config:set DEPLOY_TASKS='db:migrate' -a #{PROD}"
-system "heroku config:set THEMENU_AWS_ACCESS_KEY=#{ENV["THEMENU_AWS_ACCESS_KEY"]} -a #{PROD}"
-system "heroku config:set THEMENU_AWS_SECRET=#{ENV["THEMENU_AWS_SECRET"]} -a #{PROD}"
 system "heroku config:set REDIS_URL=`heroku config:get REDISCLOUD_URL` -a #{PROD}"
 system "heroku config:set MAX_THREADS=3 -a #{PROD}"
 system "heroku config:set WEB_CONCURRENCY=1 -a #{PROD}"

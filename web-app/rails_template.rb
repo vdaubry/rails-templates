@@ -17,10 +17,11 @@ add_source 'https://rubygems.org'
 
 
 inject_into_file 'Gemfile', :after => "'https://rubygems.org'" do
-  "\n\nruby '2.4.2'"
+  "\n\nruby '2.5.1'"
 end
 
 gem 'rails', '>= 5.0'
+gem 'bootsnap'
 gem 'pg'
 gem 'puma'
 gem 'jquery-rails'
@@ -33,9 +34,7 @@ gem 'redis'
 gem 'bcrypt'
 gem 'sidekiq'
 gem 'lograge'
-gem 'aws-sdk'
-gem 'active_model_serializers'
-gem 'administrate', :git => 'git://github.com/thoughtbot/administrate.git'
+gem 'administrate'
 
 #Add for performance profiling
 # gem 'rack-mini-profiler'
@@ -44,6 +43,7 @@ gem 'administrate', :git => 'git://github.com/thoughtbot/administrate.git'
 # gem 'stackprof'
 # gem 'ruby-prof'
 # gem 'benchmark-ips'
+# gem 'derailed'
 
 gem_group :development, :test do
   gem 'byebug'
@@ -59,17 +59,15 @@ gem_group :development do
   gem 'bullet'
   gem 'better_errors'
   gem 'binding_of_caller'
-  #gem 'capistrano-rails'
-  #gem 'capistrano-bundler'
-  gem 'derailed'
   gem 'letter_opener'
+  gem 'marginalia'
 end
 
 gem_group :test do
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'timecop'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'webmock'
   gem 'fakeredis'
   gem 'rails-controller-testing'
@@ -119,6 +117,8 @@ inside 'app' do
     directory "user_services"
     empty_directory "workers"
     empty_directory "builders"
+
+    copy_file "callback.rb"
   end
   
   ["custom_views", 
@@ -203,18 +203,25 @@ after_bundle do
   
   append_to_file 'db/seeds.rb' do
     'User.destroy_all'
-    'User.create!(email: "vdaubry@gmail.com", password: "azerty", admin: true)'
+    "User.create!("\
+      "email: 'vdaubry@gmail.com',"\
+      "password: 'azerty',"\
+      "admin: true,"\
+      "token: SecureRandom.uuid,"\
+      "refresh_token: SecureRandom.uuid"\
+    )"
+
   end
   rake "db:seed"
   
   rake "db:create", env: :test
   rake "db:migrate", env: :test
   
-  # remove_file "app/controllers/admin/users_controller.rb" #skip is ignored by administrate when generating user_controller...
-  # run "DISABLE_SPRING=1 rails generate administrate:install --skip"
-  # remove_file "app/controllers/admin/users_controller.rb"
-  # copy_file "app/custom_controllers/admin/users_controller.rb", "app/controllers/admin/users_controller.rb"
-  # copy_file "app/dashboards/user_dashboard.rb", "app/dashboards/user_dashboard.rb"
+  remove_file "app/controllers/admin/users_controller.rb" #skip is ignored by administrate when generating user_controller...
+  run "DISABLE_SPRING=1 rails generate administrate:install --skip"
+  remove_file "app/controllers/admin/users_controller.rb"
+  copy_file "app/custom_controllers/admin/users_controller.rb", "app/controllers/admin/users_controller.rb"
+  copy_file "app/dashboards/user_dashboard.rb", "app/dashboards/user_dashboard.rb"
   
   #capistrano
   # run "DISABLE_SPRING=1 bundle exec cap install"

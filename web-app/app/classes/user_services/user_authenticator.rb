@@ -10,9 +10,11 @@ module UserServices
       yield callback if block_given?
 
       user = User.where(email: email.try(:downcase)).first
-      return callback.on_failure.try(:call) unless user && user.authenticate(password)
-
-      callback.on_success.try(:call, user)
+      if user&.authenticate(password)
+        callback.success(user)
+      else
+        callback.failure
+      end
     end
 
     private

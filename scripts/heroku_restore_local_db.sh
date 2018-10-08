@@ -23,7 +23,7 @@ heroku pg:backups capture -a $current
 echo "Reset DB"
 bundle exec rake db:drop db:create
 echo "Download DB dump from $current"
-curl -o tmp/db.dump `heroku pg:backups public-url -a $current`
+curl -o tmp/db.dump `heroku pg:backups:url -a $current`
 echo "Restore DB"
 pg_restore -h localhost -d $LOCAL_DB_NAME tmp/db.dump || true
 echo "Restore test db"
