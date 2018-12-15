@@ -1,0 +1,11 @@
+module Api
+  module V0
+    class <%= class_name %>Serializer < Api::V0::BaseSerializer
+      def json
+        {
+            <%= attributes_names.map {|attr| "#{attr}: object.#{attr}"}.join(",\n            ") %>
+        }
+      end
+    end
+  end
+end

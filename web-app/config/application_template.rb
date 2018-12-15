@@ -14,9 +14,12 @@ module %app_name%
     #config.i18n.default_locale = :fr
     
     config.generators do |g|
+      g.resource_controller "lib/templates/rails/scaffold_controller/api_controller.rb"
       g.test_framework :rspec
+      g.integration_tool nil
       g.view_specs false
       g.helper_specs false
+      g.helper false
       g.assets false
       g.routing_specs false
       g.fixture_replacement :factory_girl
