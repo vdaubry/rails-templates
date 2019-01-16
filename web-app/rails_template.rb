@@ -17,7 +17,7 @@ add_source 'https://rubygems.org'
 
 
 inject_into_file 'Gemfile', :after => "'https://rubygems.org'" do
-  "\n\nruby '2.5.1'"
+  "\n\nruby '2.6.0'"
 end
 
 gem 'rails', '>= 5.0'
@@ -209,8 +209,7 @@ after_bundle do
       "admin: true,"\
       "token: SecureRandom.uuid,"\
       "refresh_token: SecureRandom.uuid"\
-    )"
-
+    ")"
   end
   rake "db:seed"
   
