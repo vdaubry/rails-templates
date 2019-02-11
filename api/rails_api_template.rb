@@ -17,7 +17,7 @@ add_source 'https://rubygems.org'
 
 
 inject_into_file 'Gemfile', :after => "'https://rubygems.org'" do
-  "\n\nruby '2.4.2'"
+"\n\nruby '2.5.1'"
 end
 
 gem 'rails'
