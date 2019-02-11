@@ -3,7 +3,7 @@ require 'rails_helper'
 describe SessionsController do
   render_views
   
-  let(:user) { FactoryGirl.create(:user, email: "foo@bar.com", password: "foo") }
+  let(:user) { create(:user, email: "foo@bar.com", password: "foo") }
   
   describe "POST create" do
     context "valid credentials" do

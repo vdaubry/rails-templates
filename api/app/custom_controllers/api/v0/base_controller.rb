@@ -32,7 +32,7 @@ module Api
 
       def validate_request!
         begin
-          Validators::ApiRequestValidator.new(params: params, headers: headers, env: request.env).validate!
+          Validators::ApiRequestValidator.new(params: params, headers: request.headers, env: request.env).validate!
         rescue Validators::UnauthorisedApiKeyError => e
           Rails.logger.error e
           return render json: {message: 'Missing API Key or invalid key'}, status: 426
