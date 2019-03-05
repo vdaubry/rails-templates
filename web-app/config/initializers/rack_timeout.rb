@@ -1,0 +1,1 @@
+Rack::Timeout.service_timeout = ENV["RACK_TIMEOUT"] || 5

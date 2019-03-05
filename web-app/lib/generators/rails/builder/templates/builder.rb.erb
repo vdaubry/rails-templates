@@ -1,0 +1,35 @@
+module Builders
+  class <%= class_name %>Builder
+    def initialize(params:)
+      @params = params
+      @callback = Callback.new
+    end
+
+    def create
+      yield callback if block_given?
+
+      <%= class_name.underscore %> = <%= class_name %>.new(params)
+
+      if <%= class_name.underscore %>.save
+        callback.on_success.try(:call, <%= class_name.underscore %>)
+      else
+        callback.on_failure.try(:call, <%= class_name.underscore %>)
+      end
+    end
+
+    def update(<%= class_name.underscore %>)
+      yield callback if block_given?
+
+      <%= class_name.underscore %>.assign_attributes(params)
+
+      if <%= class_name.underscore %>.save
+        callback.on_success.try(:call, <%= class_name.underscore %>)
+      else
+        callback.on_failure.try(:call, <%= class_name.underscore %>)
+      end
+    end
+
+    private
+    attr_reader :callback, :params, :<%= class_name.underscore %>
+  end
+end
