@@ -4,7 +4,7 @@ module Api
       skip_before_action :authenticate_user!, only: [:login]
 
       def login
-        user_service = UserServices::HelperAuthenticator.new(email: user_params[:email], password: user_params[:password])
+        user_service = UserServices::UserAuthenticator.new(email: user_params[:email], password: user_params[:password])
         user_service.authenticate do |on|
           on.success do |user|
             render json: user, status: 200

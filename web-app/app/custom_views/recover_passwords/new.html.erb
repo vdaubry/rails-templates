@@ -1,0 +1,48 @@
+<div class="col-md-6 col-md-offset-3" style="color: white;">
+  <br>
+  <div style="margin: auto; width: 300px; height: 29px;">
+
+  </div>
+  <br><br>
+
+  <h2>Entrez un nouveau mot de passe</h2>
+
+  <% if @errors&.any? %>
+    <div id="error_explanation">
+      Erreur, votre mot de passe n'a pu être réinitialisé pour
+      <% if @errors.count < 2 %>
+        la raison suivante :
+      <% else %>
+        les raisons suivante :
+      <% end  %>
+
+      <ul>
+        <% @errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_tag(recover_password_path, :method => :post) do %>
+    <%= hidden_field_tag 'recovery_token', @recovery_token %>
+
+    <div class="row">
+      <div class="col-md-12">
+        <%= password_field_tag :password, nil, placeholder: "mot de pase", class: 'form-control', required: true %>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <%= password_field_tag :password_confirmation, nil, placeholder: "confirmation de mot de pase", class: 'form-control', required: true %>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <%= submit_tag("Changer votre mot de passe", class: "btn btn-large btn-primary") %>
+      </div>
+    </div>
+  <% end %>
+</div>

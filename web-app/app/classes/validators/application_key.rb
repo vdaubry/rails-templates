@@ -15,7 +15,7 @@ module Validators
     def api_keys
       @api_keys ||= { 
         "unit_test" => {platform: "test", app_version: "unit_test"},
-        "..." => {platform: "ios", app_version: "1.0"},
+        "ce70b3608cdb" => {platform: "ios", app_version: "1.0"},
       }
     end
   end

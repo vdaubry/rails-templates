@@ -19,6 +19,8 @@ system "heroku addons:create semaphore:nano -a #{PROD}"
 system "heroku addons:create sendgrid:starter -a #{PROD}"
 system "heroku pg:backups schedule DATABASE_URL --at '02:00 Europe/Paris' -a #{PROD}"
 
+system "pg:wait -a #{PROD}"
+
 #heroku run rake task buildpack
 system "heroku buildpacks:set https://github.com/heroku/heroku-buildpack-ruby -a #{PROD}"
 system "heroku buildpacks:add https://github.com/gunpowderlabs/buildpack-ruby-rake-deploy-tasks -a #{PROD}"
@@ -38,10 +40,10 @@ system "git push production master"
 system "heroku run rake db:seed -a #{PROD}"
 
 # Create heroku staging env
-system "heroku fork --from #{PROD} --to #{STAGING} --skip-pg"
-system "heroku addons:destroy sentry:small29 -a #{STAGING} --confirm #{STAGING}"
-system "heroku addons:destroy semaphore:nano -a #{STAGING} --confirm #{STAGING}"
-system "heroku addons:create heroku-postgresql:hobby-basic -a #{STAGING}"
-system "heroku pg:wait -a #{STAGING}"
-system "heroku pg:copy #{PROD}::DATABASE_URL DATABASE_URL -a #{STAGING} --confirm #{STAGING}"
-system "heroku config:set HOST=#{STAGING}.herokuapp.com -a #{STAGING}"
+# system "heroku fork --from #{PROD} --to #{STAGING} --skip-pg"
+# system "heroku addons:destroy sentry:small29 -a #{STAGING} --confirm #{STAGING}"
+# system "heroku addons:destroy semaphore:nano -a #{STAGING} --confirm #{STAGING}"
+# system "heroku addons:create heroku-postgresql:hobby-basic -a #{STAGING}"
+# system "heroku pg:wait -a #{STAGING}"
+# system "heroku pg:copy #{PROD}::DATABASE_URL DATABASE_URL -a #{STAGING} --confirm #{STAGING}"
+# system "heroku config:set HOST=#{STAGING}.herokuapp.com -a #{STAGING}"

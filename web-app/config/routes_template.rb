@@ -16,8 +16,10 @@ Rails.application.routes.draw do
     namespace :v0 do
       get 'check' => 'base#check'
       post 'login' => 'sessions#login'
+      post  "password/recover" => "forgot_passwords#create"
     end
   end
+  resource  :recover_password,  only: [:new, :create]
   
   get '*path', to: 'application#render_404', via: :all
 end

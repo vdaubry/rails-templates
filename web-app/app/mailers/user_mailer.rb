@@ -1,8 +1,9 @@
-class MemberMailer < ActionMailer::Base
-  default from: "contact@domain.com"
+class UserMailer < ActionMailer::Base
+  default from: "noreply@1job1passion.com"
   
-  def welcome(user)
+  def send_password(user, reset_token)
     @user = user
-    mail(to: @user.email, subject: 'Welcome')
+    @reset_token = reset_token
+    mail(to: @user.email, subject: "Mot de passe oublié ?")
   end
 end
