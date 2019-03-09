@@ -137,6 +137,7 @@ inside 'app' do
   
   directory "mailers"
   directory "serializers"
+  directory "jobs"
 end
 
 after_bundle do

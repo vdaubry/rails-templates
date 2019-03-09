@@ -15,8 +15,12 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v0 do
       get 'check' => 'base#check'
+      get 'config'  => 'config#index'
       post 'login' => 'sessions#login'
       post  "password/recover" => "forgot_passwords#create"
+
+      resources :users, only: [:show, :update] do
+      end
     end
   end
   resource  :recover_password,  only: [:new, :create]

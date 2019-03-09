@@ -64,7 +64,7 @@ gem_group :test do
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'timecop'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'webmock'
   gem 'fakeredis'
 end

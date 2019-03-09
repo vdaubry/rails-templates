@@ -22,8 +22,8 @@ module %app_name%
       g.helper false
       g.assets false
       g.routing_specs false
-      g.fixture_replacement :factory_girl
-      g.factory_girl dir: 'spec/factories'
+      g.fixture_replacement :factory_bot
+      g.factory_bot dir: 'spec/factories'
     end
 
     config.active_job.queue_adapter = :sidekiq

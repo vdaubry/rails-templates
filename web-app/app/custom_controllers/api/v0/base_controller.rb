@@ -59,6 +59,12 @@ module Api
       def bearer
         request.env['Authorization'] || request.env['HTTP_AUTHORIZATION'] || params[:token]
       end
+
+      def validate_user(user_id)
+        if user_id != "me" && (user_id.to_i != current_user.id)
+          render_error(code: "AUTHENTICATION_FAILED", message: "Cannot get info about another user", status: 401)
+        end
+      end
     end
   end
 end
