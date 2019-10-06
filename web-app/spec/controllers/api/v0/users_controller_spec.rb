@@ -43,11 +43,6 @@ describe Api::V0::UsersController, type: :controller do
           email: "new@bar.com",
           first_name: "foo",
           last_name: "bar",
-          city_key: "barkey",
-          city_label: "barlabel",
-          cloudinary_avatar_id: "foobar1",
-          country_key: "fookey",
-          country_label: "foolabel"
         } }
         before do
           patch :update, params: { id: logged_user.to_param, user: user_attributes, token: "Bearer #{logged_user.token}" }
@@ -59,11 +54,6 @@ describe Api::V0::UsersController, type: :controller do
         it { expect(logged_user.email).to eq("new@bar.com") }
         it { expect(logged_user.first_name).to eq("foo") }
         it { expect(logged_user.last_name).to eq("bar") }
-        it { expect(logged_user.city_key).to eq("barkey") }
-        it { expect(logged_user.city_label).to eq("barlabel") }
-        it { expect(logged_user.cloudinary_avatar_id).to eq("foobar1") }
-        it { expect(logged_user.country_key).to eq("fookey") }
-        it { expect(logged_user.country_label).to eq("foolabel") }
       end
 
       context "invalid params" do

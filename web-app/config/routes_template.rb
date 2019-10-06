@@ -7,23 +7,26 @@ Rails.application.routes.draw do
     resources :users
   end
 
-  resources :sessions, only: [:new, :create, :destroy]
-
-  get 'about' => 'home#about'
-  
   #API
   namespace :api do
     namespace :v0 do
       get 'check' => 'base#check'
       get 'config'  => 'config#index'
-      post 'login' => 'sessions#login'
       post  "password/recover" => "forgot_passwords#create"
 
       resources :users, only: [:show, :update] do
+        collection do
+          post 'signin' => 'login#create'
+          post 'signup' => 'register#create'
+        end 
       end
     end
   end
+  
   resource  :recover_password,  only: [:new, :create]
+  resources :sessions, only: [:new, :create, :destroy]
+  get 'about' => 'home#about'
+
   
   get '*path', to: 'application#render_404', via: :all
 end

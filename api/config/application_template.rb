@@ -31,8 +31,8 @@ module %app_name%
       g.view_specs false
       g.helper_specs false
       g.routing_specs false
-      g.fixture_replacement :factory_girl
-      g.factory_girl dir: 'spec/factories'
+      g.fixture_replacement :factory_bot
+      g.factory_bot dir: 'spec/factories'
       g.serializer :serializer
     end
 

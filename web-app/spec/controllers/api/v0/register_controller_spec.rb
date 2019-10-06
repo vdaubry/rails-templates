@@ -7,7 +7,6 @@ RSpec.describe Api::V0::RegisterController, type: :controller do
     password: "foobar",
     first_name: "foo",
     last_name: "bar",
-    cloudinary_avatar_id: "foo_foo"
   } }
 
   let(:invalid_attributes) { {email: "foobar", password: "foobar"} }
@@ -24,7 +23,6 @@ RSpec.describe Api::V0::RegisterController, type: :controller do
       it { expect(parsed_response["user"]["last_name"]).to eq("bar") }
       it { expect(parsed_response["user"]["token"]).to eq(User.last.token) }
       it { expect(parsed_response["user"]["refresh_token"]).to eq(User.last.refresh_token) }
-      it { expect(parsed_response["user"]["avatar_url"]).to eq("https://res.cloudinary.com/hda06s1ql/image/upload/c_scale,w_300/foo_foo") }
     end
 
     context "invalid attributes" do

@@ -47,3 +47,5 @@ system "heroku run rake db:seed -a #{PROD}"
 # system "heroku pg:wait -a #{STAGING}"
 # system "heroku pg:copy #{PROD}::DATABASE_URL DATABASE_URL -a #{STAGING} --confirm #{STAGING}"
 # system "heroku config:set HOST=#{STAGING}.herokuapp.com -a #{STAGING}"
+
+git remote add staging git@heroku.com:$STAGING.git

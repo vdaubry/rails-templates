@@ -5,6 +5,8 @@ module Api
       def json
         {
           id: object.id,
+          first_name: object.first_name,
+          last_name: object.last_name,
           email: object.email,
           token: object.token,
           refresh_token: object.refresh_token,

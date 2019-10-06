@@ -17,11 +17,11 @@ add_source 'https://rubygems.org'
 
 
 inject_into_file 'Gemfile', :after => "'https://rubygems.org'" do
-  "\n\nruby '2.6.0'"
+  "\n\nruby '2.6.5'"
 end
 
-gem 'rails', '>= 5.0'
-gem 'bootsnap'
+gem 'rails', '>= 6.0'
+
 gem 'pg'
 gem 'puma'
 gem 'jquery-rails'
@@ -35,6 +35,8 @@ gem 'bcrypt'
 gem 'sidekiq'
 gem 'lograge'
 gem 'administrate'
+gem 'webpacker'
+gem 'bootsnap', '>= 1.4.2', require: false
 
 #Add for performance profiling
 # gem 'rack-mini-profiler'
@@ -64,7 +66,7 @@ gem_group :development do
 end
 
 gem_group :test do
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 4.0'
   gem 'shoulda-matchers'
   gem 'timecop'
   gem 'factory_bot_rails'
@@ -89,12 +91,6 @@ copy_file "Procfile"
 
 remove_dir "test"
 directory "custom_test", "test"
-
-#DB config
-db_conf_file = "config/database.yml"
-db_conf = YAML.load_file db_conf_file
-db_conf["pool"] = "<%= ENV['MAX_THREADS'] || 5 %>"
-File.open(db_conf_file, 'w') { |f| YAML.dump(db_conf, f) }
 
 inside 'config' do
   copy_file "puma.rb"
@@ -173,6 +169,7 @@ after_bundle do
     directory "controllers"
     directory "models"
     directory "factories"
+    directory "helpers"
   end
 
   inside 'config' do

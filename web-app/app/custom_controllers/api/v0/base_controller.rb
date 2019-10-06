@@ -6,6 +6,7 @@ module Api
       before_action :allow_cors
       before_action :validate_request!
       before_action :authenticate_user!
+      before_action :set_language
 
       def allow_cors
         headers["Access-Control-Allow-Origin"] = "*"
@@ -55,6 +56,17 @@ module Api
         render json: {status: :ok}
       end
 
+      def set_language
+        if current_user
+          if language.present? &&
+            (current_user.language.nil? || current_user.language != language)
+            current_user.update(language: language)
+          end
+
+          I18n.locale = current_user.language || "en"
+        end
+      end
+
       private
       def bearer
         request.env['Authorization'] || request.env['HTTP_AUTHORIZATION'] || params[:token]
@@ -64,6 +76,10 @@ module Api
         if user_id != "me" && (user_id.to_i != current_user.id)
           render_error(code: "AUTHENTICATION_FAILED", message: "Cannot get info about another user", status: 401)
         end
+      end
+
+      def language
+        (request.env['Accept-Language'] || request.env['HTTP_ACCEPT_LANGUAGE'])&.split(/-|_/)&.first&.downcase
       end
     end
   end
