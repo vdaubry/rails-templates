@@ -2,8 +2,8 @@
 
 require 'dotenv'
 
-APP="themenu-api"
-PROD="#{APP}-prod"
+APP="{your-app}"
+PROD="#{APP}-production"
 STAGING="#{APP}-staging"
 
 Dotenv.load
@@ -17,9 +17,8 @@ system "heroku addons:create newrelic:wayne -a #{PROD}"
 system "heroku addons:create rediscloud:30 -a #{PROD}"
 system "heroku addons:create semaphore:nano -a #{PROD}"
 system "heroku addons:create sendgrid:starter -a #{PROD}"
-system "heroku pg:backups schedule DATABASE_URL --at '02:00 Europe/Paris' -a #{PROD}"
-
 system "pg:wait -a #{PROD}"
+system "heroku pg:backups schedule DATABASE_URL --at '02:00 Europe/Paris' -a #{PROD}"
 
 #heroku run rake task buildpack
 system "heroku buildpacks:set https://github.com/heroku/heroku-buildpack-ruby -a #{PROD}"
@@ -31,7 +30,6 @@ system "heroku config:set WEB_CONCURRENCY=1 -a #{PROD}"
 system "heroku config:set RACK_ENV=production -a #{PROD}"
 system "heroku config:set RAILS_ENV=production -a #{PROD}"
 system "heroku config:set HOST=#{PROD}.herokuapp.com -a #{PROD}"
-system "heroku labs:enable runtime-dyno-metadata"
 
 #Push code to Heroku
 system "git push production master"

@@ -66,7 +66,7 @@ gem_group :development do
 end
 
 gem_group :test do
-  gem 'rspec-rails', '~> 4.0'
+  gem 'rspec-rails', '~> 4.0.0.beta2'
   gem 'shoulda-matchers'
   gem 'timecop'
   gem 'factory_bot_rails'
