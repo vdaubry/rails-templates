@@ -8,6 +8,8 @@ class CreateUsers < ActiveRecord::Migration[5.0]
       t.string  :refresh_token,        null: false
       t.timestamps                     null: false
     end
-    add_index :users, :email, :unique => true
+    add_index :users, :email, unique: true
+    add_index :users, :token, unique: true
+    add_index :users, :refresh_token, unique: true
   end
 end

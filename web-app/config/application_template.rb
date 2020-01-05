@@ -52,8 +52,8 @@ module %app_name%
 
       params = params.merge(event.payload[:headers].env.select {|k| ["HTTP_X_API_KEY", "HTTP_AUTHORIZATION"].include? k })
 
-      { "params" => params }
+      { params: params, ip: event.payload[:ip] }
     end
-    config.log_tags = [ lambda {|req| Time.now.to_s(:db) }, :remote_ip ]
+    config.log_tags = [ lambda {|req| Time.now.to_s(:db) }]
   end
 end

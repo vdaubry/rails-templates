@@ -11,6 +11,11 @@ class ApplicationController < ActionController::Base
       return redirect_to root_url, status: 301
     end
   end
+
+  def append_info_to_payload(payload)
+    super
+    payload[:ip] = request.remote_ip
+  end
   
   def current_user
     @current_user ||= User.where(id: session[:user_id]).first
