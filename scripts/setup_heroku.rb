@@ -30,6 +30,7 @@ system "heroku config:set WEB_CONCURRENCY=1 -a #{PROD}"
 system "heroku config:set RACK_ENV=production -a #{PROD}"
 system "heroku config:set RAILS_ENV=production -a #{PROD}"
 system "heroku config:set HOST=#{PROD}.herokuapp.com -a #{PROD}"
+system "heroku config:set WORKER_THREADS=5 -a #{PROD}"
 
 #Push code to Heroku
 system "git push production master"
@@ -39,11 +40,12 @@ system "heroku run rake db:seed -a #{PROD}"
 
 # Create heroku staging env
 # system "heroku fork --from #{PROD} --to #{STAGING} --skip-pg"
-# system "heroku addons:destroy sentry:small29 -a #{STAGING} --confirm #{STAGING}"
+# system "heroku addons:destroy sentry:f1 -a #{STAGING} --confirm #{STAGING}"
 # system "heroku addons:destroy semaphore:nano -a #{STAGING} --confirm #{STAGING}"
 # system "heroku addons:create heroku-postgresql:hobby-basic -a #{STAGING}"
 # system "heroku pg:wait -a #{STAGING}"
 # system "heroku pg:copy #{PROD}::DATABASE_URL DATABASE_URL -a #{STAGING} --confirm #{STAGING}"
 # system "heroku config:set HOST=#{STAGING}.herokuapp.com -a #{STAGING}"
+# system "heroku config:set STAGING=true -a #{STAGING}"
 
 git remote add staging git@heroku.com:$STAGING.git
