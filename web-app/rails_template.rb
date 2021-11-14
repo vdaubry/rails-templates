@@ -17,7 +17,7 @@ add_source 'https://rubygems.org'
 
 
 inject_into_file 'Gemfile', :after => "'https://rubygems.org'" do
-  "\n\nruby '2.6.5'"
+  "\n\nruby '3.0.0'"
 end
 
 gem 'rails', '>= 6.0'
@@ -108,6 +108,7 @@ end
 inside 'app' do
   empty_directory "classes"
   inside 'classes' do
+    directory "builders"
     directory "presenters"
     directory "validators"
     directory "user_services"
@@ -142,9 +143,6 @@ after_bundle do
   git :init
   git add: "."
   git commit: "-a -m 'Initial commit'"  
-  
-  #Add pessimistic constraint operator (~>) to all gems in your Gemfile, see : https://github.com/joonty/pessimize
-  run "pessimize"
   
   run "DISABLE_SPRING=1 rails generate rspec:install"
   
@@ -219,6 +217,9 @@ after_bundle do
   remove_file "app/controllers/admin/users_controller.rb"
   copy_file "app/custom_controllers/admin/users_controller.rb", "app/controllers/admin/users_controller.rb"
   copy_file "app/dashboards/user_dashboard.rb", "app/dashboards/user_dashboard.rb"
+
+  #Add pessimistic constraint operator (~>) to all gems in your Gemfile, see : https://github.com/joonty/pessimize
+  run "pessimize"
   
   #capistrano
   # run "DISABLE_SPRING=1 bundle exec cap install"
